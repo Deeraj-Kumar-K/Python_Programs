@@ -1,0 +1,5 @@
+Without using any string methods, try to print the following
+12345........n
+
+
+https://www.hackerrank.com/challenges/python-print/problem
