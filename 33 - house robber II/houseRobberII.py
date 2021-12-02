@@ -20,11 +20,22 @@ Output: 4
 Explanation: Rob house 1 (money = 1) and then rob house 3 (money = 3).
 Total amount you can rob = 1 + 3 = 4.
 '''
+
 from typing import List
 class Solution:
+    
     def rob(self, nums: List[int]) -> int:
+    #taking max value of :
+    # 1. 2nd house to last house
+    # 2. 1st house to last second house
+    
         return max(nums[0], self.helper(nums[1:]), self.helper(nums[:-1]))
     
+    #taking care of edge case also where if there is only one house left
+    #then nums[0] is returned and empty list will be sent to the
+    # other helper functions which will return zero
+
+    #helper funtion to calculate max amount that can be robbed
     def helper(self, nums):
         rob1, rob2 = 0, 0
         for val in nums:
