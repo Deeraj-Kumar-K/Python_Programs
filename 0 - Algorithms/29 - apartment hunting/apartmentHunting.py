@@ -24,13 +24,16 @@ from your apartment to reach all of your required buildings.
 
 def apartmentHunting(blocks, requirements):
     maxDistances = [float("-inf") for block in blocks]
-    for i in range(len(blocks)):
-        for req in requirements:
+    for i in range(len(blocks)): #for each block,
+        for req in requirements: #iterate through all requirements,
             closestDistance = float("inf")
-            for j in range(len(blocks)):
-                if blocks[j][req]:
+            for j in range(len(blocks)): #for each requirement, iterate through all blocks and find,
+                if blocks[j][req]: #'blocks' contains hashtables, so we check if req == true,
+                    #find the closestDistance of that requirement(ex:gym) to our current block
                     closestDistance = min(closestDistance, getDistance(i, j))
+            #from closestDistances of all requirements, find the largest value we'll have to travel
             maxDistances[i] = max(maxDistances[i], closestDistance)
+    #from all the largest values, we need find the minimum value and return its index value
     return getIndexOfMinValue(maxDistances)                
 
 def getDistance(i, j):
@@ -71,7 +74,7 @@ In this list, '1' is the smallest value/distance that we need to travel for our 
 So block '3' (ie. index val) which contains distance '1' is the location for our apartment.
 Output : 3
 '''
-
+'''
 def apartmentHunting(blocks, requirements):
     #for each requirement, we call getMinDistance() which returns a list of min distances
     #we need to travel for that particular requirement(for ex: gym) at each block
@@ -122,7 +125,37 @@ def getIndexOfMinValue(array):
 
 def getDistance(a, b):
     return abs(a - b)
-    
+'''
+
+# Solution 1 (a) : Brute Force Modified for Space complexity
+# Time: O(b^2 * r) , Space: O(1)
+#not using array to store max distances of blocks, so constant space
+
+def apartmentHunting(blocks, reqs):
+    #maxDistanceAtBlocks = [float("-inf") for block in blocks]
+    idx = None #keeps track of index value for final result
+    minValue = float("inf") #keeps track of minValue out of all maxDistances
+    for i in range(len(blocks)):
+        #instead of storing max distances in array, we store it in a variable
+        maxDistance = float("-inf") #for each block, we initialize it to "inf"
+        for req in reqs:
+            closestReqDistance = float("inf")
+            for j in range(len(blocks)):
+                if blocks[j][req]:
+                    closestReqDistance = min(closestReqDistance, distanceBetween(i, j))
+            maxDistance = max(maxDistance, closestReqDistance) #find max of all min distances
+            #maxDistanceAtBlocks[i] = max(maxDistanceAtBlocks[i], closestReqDistance)
+        if maxDistance < minValue: #from that max value, we need to keep track of, 
+            minValue = maxDistance #which max value is the smallest number and then,
+            idx = i #we need to keep track of its index value
+    return idx
+    #return getIdxAtMinValue(maxDistanceAtBlocks)
+
+def distanceBetween(a, b):
+    return abs(a - b)
+
+#####################################################
+# blocks is a list containing hashtables for every block
 blocks = [
             {"gym": False, "school": True, "store": False},
             {"gym": True, "school": False, "store": False},
