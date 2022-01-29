@@ -126,7 +126,7 @@ def getIndexOfMinValue(array):
 def getDistance(a, b):
     return abs(a - b)
 '''
-
+'''
 # Solution 1 (a) : Brute Force Modified for Space complexity
 # Time: O(b^2 * r) , Space: O(1)
 #not using array to store max distances of blocks, so constant space
@@ -153,6 +153,57 @@ def apartmentHunting(blocks, reqs):
 
 def distanceBetween(a, b):
     return abs(a - b)
+'''
+
+# Solution 2: Time and Space Complexity Analysis
+#Time: [ O(2*b*r) + O(b) ] = [ b*(r + 1) ] = O(b * r) time
+#Space: [ O(b * r) + O(b)] = O(b * r) space
+
+def apartmentHunting(blocks, reqs):
+    #pre-computing minimum distances of all requirements for every block
+    #O(b) time for getMinDistances(), so we need to call function for 'r' no. of requirements
+    minDistancesOfAllReqs = list(map(lambda req: getMinDistances(blocks, req), reqs)) #O(b * r) time
+    #for each block, get the max value out of pre-computed requirements minimum distances
+    maxDistancesOutOfAllMinDistances = getMaxDistances(blocks, minDistancesOfAllReqs) #O(b * r) time
+    #return index value of the smallest number out of all max values
+    return getIdxAtMinValue(maxDistancesOutOfAllMinDistances) #O(b) time
+    
+def getMinDistances(blocks, req): #total O(3 * b) time = O(b) time , O(b * r) space
+    minDistances = [0 for block in blocks] #O(b) time, O(b * r) space
+    #req - current requirement (ex: gym, school, etc)
+    reqLastFoundAtIdx = float("inf")
+    for i in range(len(blocks)): #O(b) time
+        #if requirement is found at current block then, store its index value
+        if blocks[i][req]:
+            reqLastFoundAtIdx = i
+        #calculate distance b/w our curr. block and where req. was last found at
+        minDistances[i] = getDistanceBetween(i, reqLastFoundAtIdx)
+    for i in reversed(range(len(blocks))): #O(b) time
+        if blocks[i][req]:
+            reqLastFoundAtIdx = i
+        minDistances[i] = min(minDistances[i], getDistanceBetween(i, reqLastFoundAtIdx))
+    return minDistances
+
+def getDistanceBetween(i, j): #O(1) time
+    return abs(i - j)
+
+def getMaxDistances(blocks, minDistancesOfAllReqs): #total O(b + b*r) = O(b * r) time , O(b) space
+    maxDistances = [0 for block in blocks] #O(b) time , O(b) space
+    for i in range(len(blocks)): #O(b) time
+        #minDistancesOfAllReqs conatins 'r' no. of arrays, so lambda function performs 'r' no. of operations
+        allReqsValuesOfCurrentBlock = list(map(lambda distances: distances[i], minDistancesOfAllReqs)) #O(r) time
+        maxDistances[i] = max(allReqsValuesOfCurrentBlock)
+    return maxDistances
+
+def getIdxAtMinValue(array): #total O(b) time
+    minValue = float("inf")
+    idxAtMinValue = 0
+    for i in range(len(array)): #O(b) time
+        currentValue = array[i]
+        if currentValue < minValue:
+            minValue = currentValue
+            idxAtMinValue = i
+    return idxAtMinValue
 
 #####################################################
 # blocks is a list containing hashtables for every block
