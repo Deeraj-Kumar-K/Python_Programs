@@ -161,15 +161,15 @@ def distanceBetween(a, b):
 
 def apartmentHunting(blocks, reqs):
     #pre-computing minimum distances of all requirements for every block
-    #O(b) time for getMinDistances(), so we need to call function for 'r' no. of requirements
-    minDistancesOfAllReqs = list(map(lambda req: getMinDistances(blocks, req), reqs)) #O(b * r) time
+    #O(b) time -> getMinDistances(), we need to call function for 'r' no. of requirements
+    minDistancesOfAllReqs = list(map(lambda req: getMinDistances(blocks, req), reqs)) #O(b * r) time, O(b * r) space
     #for each block, get the max value out of pre-computed requirements minimum distances
-    maxDistancesOutOfAllMinDistances = getMaxDistances(blocks, minDistancesOfAllReqs) #O(b * r) time
+    maxDistancesOutOfAllMinDistances = getMaxDistances(blocks, minDistancesOfAllReqs) #O(b * r) time, O(b) space
     #return index value of the smallest number out of all max values
     return getIdxAtMinValue(maxDistancesOutOfAllMinDistances) #O(b) time
     
 def getMinDistances(blocks, req): #total O(3 * b) time = O(b) time , O(b * r) space
-    minDistances = [0 for block in blocks] #O(b) time, O(b * r) space
+    minDistances = [0 for block in blocks] #O(b) time, O(b) space
     #req - current requirement (ex: gym, school, etc)
     reqLastFoundAtIdx = float("inf")
     for i in range(len(blocks)): #O(b) time
