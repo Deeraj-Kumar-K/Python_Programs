@@ -199,5 +199,4 @@ array = [
     [3]
  ]
 print(Solution().spiralOrder(array))
-#output : [1,2,3,4,8,12,11,10,9,5,6,7]
-
+#output : [1,2,3]
